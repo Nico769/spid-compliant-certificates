@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
+crt="crt.pem"
 csr="csr.pem"
 key="key.pem"
 
@@ -155,6 +155,26 @@ cat <<EOF
 ## --------------------------------------------------------------------------
 
 $(openssl req -in ${csr} -noout -text)
+
+EOF
+
+## --------------------------------------------------------------------------
+## Generate the self-signed certificate from the certificate signing request
+## --------------------------------------------------------------------------
+
+openssl req -x509 -config ${openssl_conf} \
+    -days ${DAYS:=730} \
+    -key ${key} \
+    -in ${csr} \
+    -out ${crt} \
+    -extensions req_ext 2>/dev/null
+
+cat <<EOF
+## --------------------------------------------------------------------------
+## Text dump of the self-signed certificate
+## --------------------------------------------------------------------------
+
+$(openssl x509 -in ${crt} -noout -text)
 
 EOF
 

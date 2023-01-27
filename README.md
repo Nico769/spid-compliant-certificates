@@ -80,10 +80,10 @@ implementation from Agenzia per l'Italia Digitale
         $ chmod +x gencert-with-docker.sh
         $ ./gencert-with-docker.sh
 
-3.  Enjoy with your new private key (`key.pem`) and CSR (`csr.pem`)
+3.  Enjoy with your new private key (`key.pem`) and self-signed certificate (`crt.pem`)
 
         $ ls ./generated-certs/
-        csr.pem  key.pem
+        crt.pem  csr.pem  key.pem
 
 ## Private key and CSR for private sector
 
@@ -92,6 +92,7 @@ implementation from Agenzia per l'Italia Digitale
 
         $ cat > myenv.sh <<EOF
         export COMMON_NAME="Comune di Roma"
+        export DAYS="3650"
         export ENTITY_ID="https://spid.comune.roma.it/metadata"
         export KEY_LEN="3072"
         export LOCALITY_NAME="Roma"
@@ -101,8 +102,8 @@ implementation from Agenzia per l'Italia Digitale
         EOF
         $ chmod +x myenv.sh && source myenv.sh
 
-2.  Generate the private key (`key.pem`) and the certificate signing request
-    (`csr.pem`) with the following command
+2.  Generate the private key (`key.pem`), the self-signed certificate
+    (`crt.pem`) and the certificate signing request (`csr.pem`) with the following command
 
         $ chmod +x gencert-private.sh
         $ ./gencert-private.sh
@@ -158,6 +159,9 @@ environment variable.
 
 ### Commons
 
+*   `DAYS`: validity of the self-signed certificate
+    (example: `3650`, default: `730`)
+
 *   `COMMON_NAME`: short name of the service provider
     (example: `AgID`, default: `""`)
 
@@ -178,9 +182,6 @@ environment variable.
     (example: `Agenzia per l'Italia Digitale`, default: `""`)
 
 ### Public sector specific
-
-*   `DAYS`: validity of the self-signed certificate
-    (example: `3650`, default: `730`)
 
 *   `ORGANIZATION_IDENTIFIER`: service provider identifier in the form of
     `PA:IT-<IPA Code>`
